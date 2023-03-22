@@ -41,18 +41,18 @@ class LoginMiddleware implements MiddlewareInterface
         if (empty($res[0])) Tool::E('未登录！');
         $user = $this->jwtUtil->decode($res[0]);
         if (!User::query()->where('id', $user['id'])->exists()) {
-            $result = $this->errorArr('用户不存在请联系管理员！');
+            $result = $this->errorArr();
             return $this->response->withStatus(401)->withAddedHeader('content-type', 'application/json; charset=utf-8')->withBody(new SwooleStream(json_encode($result)));
         }
         Context::set("userData", $user);
         return $handler->handle($request);
     }
 
-    private function errorArr(string $msg): array
+    private function errorArr(): array
     {
         return [
             'error' => 1,
-            'message' => $msg,
+            'message' => '用户不存在请联系管理员！',
             'data' => null,
             'timestamp' => time(),
         ];

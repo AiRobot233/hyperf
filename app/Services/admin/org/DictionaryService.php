@@ -33,7 +33,6 @@ class DictionaryService
 
     public function del(int $id): void
     {
-        $dictionary = Dictionary::query()->find($id);
-        $dictionary->delete();
+        Dictionary::destroy($id);
     }
 }

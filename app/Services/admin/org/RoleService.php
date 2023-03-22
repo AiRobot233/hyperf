@@ -33,7 +33,6 @@ class RoleService
 
     public function del(int $id): void
     {
-        $role = Role::query()->find($id);
-        $role->delete();
+        Role::destroy($id);
     }
 }
