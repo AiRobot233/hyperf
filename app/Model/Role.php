@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Utils\Tool;
 use Hyperf\Database\Model\Events\Deleting;
 use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
@@ -39,9 +40,9 @@ class Role extends Model
 
     public function deleting(Deleting $event)
     {
-        if($this->is_system == 2) error('管理员账号不允许删除');
+        if($this->is_system == 2) Tool::E('管理员账号不允许删除');
         $bol = $this->query()->where('pid', $this->id)->exists();
-        if ($bol) error('有子级不允许删除');
+        if ($bol) Tool::E('有子级不允许删除');
     }
 
     public function setFromData(array $data)

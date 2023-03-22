@@ -28,10 +28,9 @@ class JwtUtil
             'body' => $body
         ];
         $token = JWT::encode($payload, self::key, 'HS256'); //输出Token
-        $time = date('Y-m-d H:i:s', $timestamp);
         return [
             'token' => $token,
-            'time' => $time
+            'expireAt' => $timestamp
         ];
     }
 
@@ -48,13 +47,13 @@ class JwtUtil
             $decoded = JWT::decode($jwt, new Key(self::key, 'HS256')); //HS256方式，这里要和签发的时候对应
             return (array)$decoded->body;
         } catch (\Firebase\JWT\SignatureInvalidException $e) {  //签名不正确
-            error('签名不正确');
+            Tool::E('签名不正确');
         } catch (\Firebase\JWT\BeforeValidException $e) {  // 签名在某个时间点之后才能用
-            error('签名使用时间未到');
+            Tool::E('签名使用时间未到');
         } catch (\Firebase\JWT\ExpiredException $e) {  // token过期
-            error('token过期');
+            Tool::E('token过期');
         } catch (\Exception $e) {  //其他错误
-            error('token其它错误');
+            Tool::E('token其它错误');
         }
     }
 }

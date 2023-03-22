@@ -6,6 +6,7 @@ use App\Middleware\AuthMiddleware;
 use App\Middleware\LoginMiddleware;
 use App\Request\UserRequest;
 use App\Services\admin\org\UserService;
+use App\Utils\Tool;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middlewares;
@@ -27,7 +28,7 @@ class UserController
         $size = $request->input('pageSize', 10);
         $name = $request->input('name', '');
         $res = $this->userService->list($size, $name);
-        return success($res);
+        return Tool::OK($res);
     }
 
     #[RequestMapping(path: "/admin/user", methods: "post")]
@@ -35,7 +36,7 @@ class UserController
     {
         $data = $request->post();
         $this->userService->add($data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/user/{id}", methods: "put")]
@@ -43,13 +44,13 @@ class UserController
     {
         $data = $request->getParsedBody();
         $this->userService->edit($id, $data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/user/{id}", methods: "delete")]
     public function del(int $id): ResponseInterface
     {
         $this->userService->del($id);
-        return success();
+        return Tool::OK();
     }
 }

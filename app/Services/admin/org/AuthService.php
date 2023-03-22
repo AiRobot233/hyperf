@@ -4,6 +4,7 @@ namespace App\Services\admin\org;
 
 use App\Model\Role;
 use App\Model\Rule;
+use App\Utils\Tool;
 use App\Utils\Util;
 use Hyperf\Context\Context;
 use Hyperf\DbConnection\Db;
@@ -19,7 +20,7 @@ class AuthService
     {
         $user = Context::get('userData');
         $role = Role::query()->where('id', $user['role_id'])->first(['rule', 'is_system']);
-        if (empty($role)) error('角色不存在!');
+        if (empty($role)) Tool::E('角色不存在!');
         if ($role->is_system == 1) {
             $rules = explode(',', $role->rule);
             $rule = Rule::query()->whereIn('id', $rules)->get();

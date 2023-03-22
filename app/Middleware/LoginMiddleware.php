@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
+use App\Model\User;
 use App\Utils\JwtUtil;
+use App\Utils\Tool;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
@@ -36,16 +38,23 @@ class LoginMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $res = $this->request->getHeader('Authorization');
-        if (empty($res[0])) {
-            $result = [
-                'error' => 1,
-                'message' => 'Authorization不存在',
-                'data' => null,
-                'timestamp' => time(),
-            ];
-            return $this->response->withStatus(200)->withBody(new SwooleStream(json_encode($result)));
+        if (empty($res[0])) Tool::E('未登录！');
+        $user = $this->jwtUtil->decode($res[0]);
+        if (!User::query()->where('id', $user['id'])->exists()) {
+            $result = $this->errorArr('用户不存在请联系管理员！');
+            return $this->response->withStatus(401)->withAddedHeader('content-type', 'application/json; charset=utf-8')->withBody(new SwooleStream(json_encode($result)));
         }
-        Context::set("userData", $this->jwtUtil->decode($res[0]));
+        Context::set("userData", $user);
         return $handler->handle($request);
+    }
+
+    private function errorArr(string $msg): array
+    {
+        return [
+            'error' => 1,
+            'message' => $msg,
+            'data' => null,
+            'timestamp' => time(),
+        ];
     }
 }

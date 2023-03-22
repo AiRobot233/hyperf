@@ -5,6 +5,7 @@ namespace App\Services\admin\org;
 use App\Model\Dictionary;
 use App\Model\Role;
 use App\Model\Rule;
+use App\Utils\Tool;
 use App\Utils\Util;
 use Hyperf\Di\Annotation\Inject;
 
@@ -16,7 +17,7 @@ class SubService
 
     public function common(string $key, mixed $data): mixed
     {
-        if (!method_exists($this, $key)) error('方法不存在！');
+        if (!method_exists($this, $key)) Tool::E('方法不存在！');
         return $this->$key($data);
     }
 

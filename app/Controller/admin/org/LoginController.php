@@ -3,6 +3,7 @@
 namespace App\Controller\admin\org;
 
 use App\Services\admin\org\LoginService;
+use App\Utils\Tool;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
@@ -22,6 +23,6 @@ class LoginController
     {
         $name = $request->post('name');
         $password = $request->post('password');
-        return success($this->loginService->login($name, $password));
+        return Tool::OK($this->loginService->login($name, $password));
     }
 }

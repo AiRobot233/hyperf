@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Utils\Tool;
 use App\Utils\Util;
 use Hyperf\Database\Model\Events\Deleting;
 use Hyperf\Database\Model\SoftDeletes;
@@ -53,7 +54,7 @@ class User extends Model
     public function deleting(Deleting $event)
     {
         $bol = $this->query()->where('pid', $this->id)->exists();
-        if ($bol) error('有子级不允许删除');
+        if ($bol) Tool::E('有子级不允许删除');
     }
 
     public function setFromData(array $data, Util $util)

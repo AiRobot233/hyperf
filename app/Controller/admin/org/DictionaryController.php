@@ -6,6 +6,7 @@ use App\Middleware\AuthMiddleware;
 use App\Middleware\LoginMiddleware;
 use App\Request\DictionaryRequest;
 use App\Services\admin\org\DictionaryService;
+use App\Utils\Tool;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middlewares;
@@ -23,7 +24,7 @@ class DictionaryController
     public function list(): ResponseInterface
     {
         $res = $this->dictionaryService->list();
-        return success($res);
+        return Tool::OK($res);
     }
 
     #[RequestMapping(path: "/admin/dictionary", methods: "post")]
@@ -31,7 +32,7 @@ class DictionaryController
     {
         $data = $request->post();
         $this->dictionaryService->add($data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/dictionary/{id}", methods: "put")]
@@ -39,13 +40,13 @@ class DictionaryController
     {
         $data = $request->getParsedBody();
         $this->dictionaryService->edit($id, $data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/dictionary/{id}", methods: "delete")]
     public function del(int $id): ResponseInterface
     {
         $this->dictionaryService->del($id);
-        return success();
+        return Tool::OK();
     }
 }

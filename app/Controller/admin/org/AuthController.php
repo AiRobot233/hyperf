@@ -4,6 +4,7 @@ namespace App\Controller\admin\org;
 
 use App\Middleware\LoginMiddleware;
 use App\Services\admin\org\AuthService;
+use App\Utils\Tool;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middleware;
@@ -20,6 +21,6 @@ class AuthController
     #[RequestMapping(path: "/admin/auth", methods: "get")]
     public function auth(): ResponseInterface
     {
-        return success($this->authService->auth());
+        return Tool::OK($this->authService->auth());
     }
 }

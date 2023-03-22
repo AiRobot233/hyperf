@@ -6,6 +6,7 @@ use App\Middleware\AuthMiddleware;
 use App\Middleware\LoginMiddleware;
 use App\Request\RuleRequest;
 use App\Services\admin\org\RuleService;
+use App\Utils\Tool;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middlewares;
@@ -23,7 +24,7 @@ class RuleController
     public function list(): ResponseInterface
     {
         $res = $this->ruleService->list();
-        return success($res);
+        return Tool::OK($res);
     }
 
     #[RequestMapping(path: "/admin/rule", methods: "post")]
@@ -31,7 +32,7 @@ class RuleController
     {
         $data = $request->post();
         $this->ruleService->add($data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/rule/{id}", methods: "put")]
@@ -39,13 +40,13 @@ class RuleController
     {
         $data = $request->getParsedBody();
         $this->ruleService->edit($id, $data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/rule/{id}", methods: "delete")]
     public function del(int $id): ResponseInterface
     {
         $this->ruleService->del($id);
-        return success();
+        return Tool::OK();
     }
 }

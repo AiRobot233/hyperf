@@ -6,6 +6,7 @@ namespace App\Middleware;
 
 use App\Model\Role;
 use App\Model\Rule;
+use App\Utils\Tool;
 use Hyperf\Context\Context;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
@@ -34,7 +35,7 @@ class AuthMiddleware implements MiddlewareInterface
     {
         $user = Context::get("userData");
         $role = Role::query()->where('id', $user['role_id'])->first(['is_system', 'rule']);
-        if (empty($role)) error('角色已被删除!');
+        if (empty($role)) Tool::E('角色已被删除!');
         if ($role->is_system == 1) {
             $path = $this->request->getPathInfo();
             $method = $this->request->getMethod();
@@ -46,7 +47,7 @@ class AuthMiddleware implements MiddlewareInterface
             }
             $rule = explode(',', $role->rule);
             $r = Rule::query()->whereIn('id', $rule)->where(['router' => $path, 'method' => $method])->exists();
-            if (!$r) error('无权限访问!');
+            if (!$r) Tool::E('无权限访问!');
         }
 
         return $handler->handle($request);

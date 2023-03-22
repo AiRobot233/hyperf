@@ -6,6 +6,7 @@ use App\Middleware\AuthMiddleware;
 use App\Middleware\LoginMiddleware;
 use App\Request\RoleRequest;
 use App\Services\admin\org\RoleService;
+use App\Utils\Tool;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\Middlewares;
@@ -23,7 +24,7 @@ class RoleController
     public function list(): ResponseInterface
     {
         $data = $this->roleService->list();
-        return success($data);
+        return Tool::OK($data);
     }
 
     #[RequestMapping(path: "/admin/role", methods: "post")]
@@ -31,7 +32,7 @@ class RoleController
     {
         $data = $request->post();
         $this->roleService->add($data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/role/{id}", methods: "put")]
@@ -39,13 +40,13 @@ class RoleController
     {
         $data = $request->getParsedBody();
         $this->roleService->edit($id, $data);
-        return success();
+        return Tool::OK();
     }
 
     #[RequestMapping(path: "/admin/role/{id}", methods: "delete")]
     public function del(int $id): ResponseInterface
     {
         $this->roleService->del($id);
-        return success();
+        return Tool::OK();
     }
 }
