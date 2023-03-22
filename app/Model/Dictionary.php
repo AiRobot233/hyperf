@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Hyperf\Database\Model\Events\Deleting;
+use Hyperf\Database\Model\Events\Saving;
 use Hyperf\DbConnection\Model\Model;
 
 /**
@@ -31,6 +33,18 @@ class Dictionary extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['id' => 'integer', 'pid' => 'integer', 'sort' => 'integer'];
+
+    public function saving(Saving $event)
+    {
+        $bol = $this->query()->where('id', '<>', $this->id)->where('name', $this->name)->exists();
+        if ($bol) error('名称不能重复');
+    }
+
+    public function deleting(Deleting $event)
+    {
+        $bol = $this->query()->where('pid', $this->id)->exists();
+        if ($bol) error('有子级不允许删除');
+    }
 
     public function setFromData(array $data)
     {

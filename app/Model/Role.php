@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Hyperf\Database\Model\Events\Deleting;
 use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
 
@@ -35,6 +36,13 @@ class Role extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['id' => 'integer', 'pid' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime', 'is_system' => 'integer'];
+
+    public function deleting(Deleting $event)
+    {
+        if($this->is_system == 2) error('管理员账号不允许删除');
+        $bol = $this->query()->where('pid', $this->id)->exists();
+        if ($bol) error('有子级不允许删除');
+    }
 
     public function setFromData(array $data)
     {

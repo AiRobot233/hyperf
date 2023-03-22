@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Hyperf\Database\Model\Events\Deleting;
 use Hyperf\DbConnection\Model\Model;
 
 /**
@@ -34,6 +35,12 @@ class Rule extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['id' => 'integer', 'pid' => 'integer', 'sort' => 'integer'];
+
+    public function deleting(Deleting $event)
+    {
+        $bol = $this->query()->where('pid', $this->id)->exists();
+        if ($bol) error('有子级不允许删除');
+    }
 
     public function setFromData(array $data)
     {

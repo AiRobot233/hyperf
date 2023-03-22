@@ -39,6 +39,7 @@ class UserService
 
     public function del(int $id): void
     {
-        User::query()->where('id', $id)->delete();
+        $user = User::query()->find($id);
+        $user->delete();
     }
 }

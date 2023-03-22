@@ -33,6 +33,7 @@ class RuleService
 
     public function del(int $id): void
     {
-        Rule::query()->where('id', $id)->delete();
+        $rule = Rule::query()->find($id);
+        $rule->delete();
     }
 }
