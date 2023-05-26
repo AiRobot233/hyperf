@@ -44,9 +44,9 @@ class HttpUtil
      * @return void
      * @throws Exception
      */
-    public function error(string $msg): void
+    public function error(string $msg, int $code = 200): void
     {
-        throw new \Exception($msg);
+        throw new \Exception($msg, $code);
     }
 
     /**

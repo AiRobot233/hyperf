@@ -28,10 +28,12 @@ class AppExceptionHandler extends ExceptionHandler
 
     public function handle(Throwable $throwable, ResponseInterface $response): ResponseInterface
     {
+        $code = 200;
         if ($throwable instanceof ValidationException) {
             $msg = $throwable->validator->errors()->first();
         } else {
             $msg = $throwable->getMessage();
+            $code = $throwable->getCode();
         }
         // 格式化输出
         $result = [
@@ -42,7 +44,7 @@ class AppExceptionHandler extends ExceptionHandler
         ];
         // 阻止异常冒泡
         $this->stopPropagation();
-        return $response->withStatus(200)->withAddedHeader('content-type', 'application/json; charset=utf-8')->withBody(new SwooleStream(json_encode($result)));
+        return $response->withStatus($code)->withAddedHeader('content-type', 'application/json; charset=utf-8')->withBody(new SwooleStream(json_encode($result)));
     }
 
     public function isValid(Throwable $throwable): bool

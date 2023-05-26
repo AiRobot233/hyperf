@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Utils\Tool;
+use Hyperf\Database\Model\Events\Creating;
 use Hyperf\Database\Model\Events\Deleting;
 use Hyperf\DbConnection\Model\Model;
 
@@ -36,6 +37,17 @@ class Rule extends Model
      * The attributes that should be cast to native types.
      */
     protected array $casts = ['id' => 'integer', 'pid' => 'integer', 'sort' => 'integer'];
+
+    public function creating(Creating $event)
+    {
+        if ($this->type == 'page') {
+            $bol = $this->query()->where('router', $this->router)->exists();
+            if ($bol) Tool::E('页面规则已存在！');
+        } else {
+            $bol = $this->query()->where(['router' => $this->router, 'method' => $this->method])->exists();
+            if ($bol) Tool::E('接口规则已存在！');
+        }
+    }
 
     public function deleting(Deleting $event)
     {

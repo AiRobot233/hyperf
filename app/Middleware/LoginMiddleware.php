@@ -38,7 +38,7 @@ class LoginMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $res = $this->request->getHeader('Authorization');
-        if (empty($res[0])) Tool::E('未登录！');
+        if (empty($res[0])) Tool::E('未登录！', 401);
         $user = $this->jwtUtil->decode($res[0]);
         if (!User::query()->where('id', $user['id'])->exists()) {
             $result = $this->errorArr();
