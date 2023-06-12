@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Middleware\LoginMiddleware;
+use App\Utils\Tool;
 use App\Utils\Util;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\Controller;
@@ -28,6 +29,6 @@ class UploadController
         $path = 'uploads/' . date('Ymd') . '/' . $this->util->getRandFileName($name) . '.' . $extension;
         $filesystem->writeStream($path, $stream);
         fclose($stream);
-        return success(['path' => $path, 'name' => $name, 'extension' => $extension]);
+        return Tool::Ok(['path' => $path, 'name' => $name, 'extension' => $extension]);
     }
 }
