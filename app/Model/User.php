@@ -7,6 +7,7 @@ namespace App\Model;
 use App\Utils\Tool;
 use App\Utils\Util;
 use Hyperf\Database\Model\Events\Deleting;
+use Hyperf\Database\Model\Events\Saving;
 use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\DbConnection\Model\Model;
 
@@ -49,6 +50,13 @@ class User extends Model
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = md5($value . $this->salt);
+    }
+
+    public function saving(Saving $event)
+    {
+        $bol = $this->query()->where('id', '<>', $this->id)
+            ->where('name', $this->name)->exists();
+        if ($bol) Tool::E('名称不能重复');
     }
 
     public function deleting(Deleting $event)

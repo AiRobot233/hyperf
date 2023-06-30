@@ -2,6 +2,7 @@
 
 namespace App\Controller\admin\org;
 
+use App\Middleware\AntiRepeatMiddleware;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\LoginMiddleware;
 use App\Request\UserRequest;
@@ -31,6 +32,7 @@ class UserController
         return Tool::OK($res);
     }
 
+    #[Middlewares([AntiRepeatMiddleware::class])]
     #[RequestMapping(path: "/admin/user", methods: "post")]
     public function add(UserRequest $request): ResponseInterface
     {
