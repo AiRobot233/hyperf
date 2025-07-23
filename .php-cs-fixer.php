@@ -16,20 +16,21 @@ return (new PhpCsFixer\Config())
         '@Symfony' => true,
         '@DoctrineAnnotation' => true,
         '@PhpCsFixer' => true,
-        'header_comment' => [
-            'comment_type' => 'PHPDoc',
-            'header' => $header,
-            'separate' => 'none',
-            'location' => 'after_declare_strict',
-        ],
+        //        'header_comment' => [
+        //            'comment_type' => 'PHPDoc',
+        //            'header' => $header,
+        //            'separate' => 'none',
+        //            'location' => 'after_declare_strict',
+        //        ],
+        'header_comment' => false,
         'array_syntax' => [
-            'syntax' => 'short'
+            'syntax' => 'short',
         ],
         'list_syntax' => [
-            'syntax' => 'short'
+            'syntax' => 'short',
         ],
         'concat_space' => [
-            'spacing' => 'one'
+            'spacing' => 'one',
         ],
         'blank_line_before_statement' => [
             'statements' => [
@@ -38,7 +39,7 @@ return (new PhpCsFixer\Config())
         ],
         'general_phpdoc_annotation_remove' => [
             'annotations' => [
-                'author'
+                'author',
             ],
         ],
         'ordered_imports' => [
@@ -67,17 +68,17 @@ return (new PhpCsFixer\Config())
         ],
         'class_attributes_separation' => true,
         'combine_consecutive_unsets' => true,
-        'declare_strict_types' => true,
+        'declare_strict_types' => false,
         'linebreak_after_opening_tag' => true,
         'lowercase_static_reference' => true,
         'no_useless_else' => true,
         'no_unused_imports' => true,
-        'not_operator_with_successor_space' => true,
+        'not_operator_with_successor_space' => false,
         'not_operator_with_space' => false,
         'ordered_class_elements' => true,
         'php_unit_strict' => false,
         'phpdoc_separation' => false,
-        'single_quote' => true,
+        'single_quote' => false,
         'standardize_not_equals' => true,
         'multiline_comment_opening_closing' => true,
     ])

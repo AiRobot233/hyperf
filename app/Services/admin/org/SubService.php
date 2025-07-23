@@ -11,20 +11,19 @@ use Hyperf\Di\Annotation\Inject;
 
 class SubService
 {
-
     #[Inject]
     private Util $util;
 
     public function common(string $key, mixed $data): mixed
     {
-        if (!method_exists($this, $key)) Tool::E('方法不存在！');
-        return $this->$key($data);
+        if (!method_exists($this, $key)) {
+            Tool::E('方法不存在！');
+        }
+        return $this->{$key}($data);
     }
 
     /**
-     * 获取规则树状下拉
-     * @param string $type
-     * @return array
+     * 获取规则树状下拉.
      */
     private function rule(string $type): array
     {
@@ -35,8 +34,7 @@ class SubService
     }
 
     /**
-     * 获取角色组树状下拉
-     * @return array
+     * 获取角色组树状下拉.
      */
     private function role(): array
     {
@@ -45,8 +43,7 @@ class SubService
     }
 
     /**
-     * 获取字典树状下拉
-     * @return array
+     * 获取字典树状下拉.
      */
     private function dictionary(): array
     {

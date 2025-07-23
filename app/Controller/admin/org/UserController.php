@@ -28,7 +28,8 @@ class UserController
     {
         $size = $request->input('pageSize', 10);
         $name = $request->input('name', '');
-        $res = $this->userService->list($size, $name);
+        $roleId = $request->input('roleId', 0);
+        $res = $this->userService->list($size, $name, $roleId);
         return Tool::OK($res);
     }
 

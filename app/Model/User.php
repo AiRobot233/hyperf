@@ -22,6 +22,7 @@ use Hyperf\DbConnection\Model\Model;
  * @property string $deleted_at
  * @property int $status
  * @property int $role_id
+ * @property int $first_login
  */
 class User extends Model
 {
@@ -40,7 +41,7 @@ class User extends Model
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime', 'status' => 'integer', 'role_id' => 'integer'];
+    protected array $casts = ['id' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime', 'status' => 'integer', 'role_id' => 'integer', 'first_login' => 'integer'];
 
     public function role(): \Hyperf\Database\Model\Relations\HasOne
     {
@@ -56,13 +57,17 @@ class User extends Model
     {
         $bol = $this->query()->where('id', '<>', $this->id)
             ->where('name', $this->name)->exists();
-        if ($bol) Tool::E('名称不能重复');
+        if ($bol) {
+            Tool::E('名称不能重复');
+        }
     }
 
     public function deleting(Deleting $event)
     {
         $bol = $this->query()->where('pid', $this->id)->exists();
-        if ($bol) Tool::E('有子级不允许删除');
+        if ($bol) {
+            Tool::E('有子级不允许删除');
+        }
     }
 
     public function setFromData(array $data, Util $util)

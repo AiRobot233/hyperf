@@ -11,12 +11,15 @@ class UserService
     #[Inject]
     private Util $util;
 
-    public function list(int $size, string $name): array
+    public function list(int $size, string $name, string $roleId): array
     {
         $data = User::query()
             ->with(['role'])
             ->when(!empty($name), function ($query) use ($name) {
                 return $query->where('name', 'like', '%' . $name . '%');
+            })
+            ->when(!empty($roleId), function ($query) use ($roleId) {
+                return $query->where('role_id', $roleId);
             })
             ->select(['id', 'name', 'phone', 'status', 'role_id'])
             ->paginate($size);
